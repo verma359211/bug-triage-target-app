@@ -1,9 +1,23 @@
 const { store } = require("../data/store");
-const { combinedDiscountPercent } = require("./coupons");
 
 const TAX_RATE = 0.0825;
 const FREE_SHIPPING_THRESHOLD_CENTS = 5000;
 const SHIPPING_CENTS = 799;
+const coupons = {
+  SAVE30: 30,
+  VIP30: 30,
+  SAVE10: 10,
+};
+
+function combinedDiscountPercent(codes = []) {
+  return codes.reduce((total, code) => {
+    const percent = coupons[code];
+    if (percent === undefined) {
+      throw new Error(`unknown coupon: ${code}`);
+    }
+    return total + percent;
+  }, 0);
+}
 
 function cartLines(items) {
   return items.map((item) => {
@@ -39,4 +53,3 @@ function calculateTotals(items, couponCodes = []) {
 }
 
 module.exports = { calculateTotals };
-
