@@ -1,8 +1,24 @@
 # Bug Triage Target App
 
-A deliberately small in-memory shop used as the target repository for the bug-triage walking skeleton.
+A deliberately small in-memory shop used as the target repository for the AI bug-triage walking skeleton. It has an Express API, a small React cart page, Jest/Supertest tests, and a GitHub Actions workflow that safely runs generated reproduction tests.
 
-## Run the backend
+## Architecture
+
+```text
+React cart page
+      |
+      v
+Express routes -> cart, pricing, stock, and order services -> in-memory store
+      ^
+      |
+Jest/Supertest tests
+
+GitHub Actions reproduction workflow -> generated repro test -> result artifact
+```
+
+## Backend
+
+Requires Node.js 20 or newer.
 
 ```bash
 npm ci
@@ -10,5 +26,31 @@ npm test
 npm start
 ```
 
-The API listens on port `3000` by default. The React client is in `frontend/` and is intentionally separate from the backend install.
+The API listens on `http://localhost:3000` by default and provides:
 
+- `GET /health`
+- `GET /cart`
+- `POST /cart/items`
+- `DELETE /cart/items/:productId`
+- `POST /checkout`
+- `GET /orders/:id`
+
+All data is held in memory and resets whenever the server restarts.
+
+## Frontend
+
+Run the backend first, then use a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Vite serves the React client and proxies cart requests to the backend.
+
+## Reproduction workflow
+
+The `.github/workflows/repro.yml` workflow is dispatched by the triage agent. It checks out a temporary branch containing a generated `repro` test, installs locked backend dependencies, runs only that test with Jest, and uploads the JSON result. The agent is responsible for deleting temporary branches, artifacts, and workflow runs afterward.
+
+This repository intentionally contains realistic defects for evaluation. Their locations and causes are kept outside this repository so the agent cannot read the answers.
