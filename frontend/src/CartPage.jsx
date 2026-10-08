@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const products = {
   mug: { name: "Coffee Mug", priceCents: 1999 },
@@ -11,23 +11,25 @@ function money(cents) {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
+function cartTotal(items) {
+  return items.reduce(
+    (total, item) => total + products[item.productId].priceCents * item.quantity,
+    0,
+  );
+}
+
 export default function CartPage() {
   const [items, setItems] = useState([]);
+  const [totalCents, setTotalCents] = useState(0);
 
   useEffect(() => {
     fetch("/cart")
       .then((response) => response.json())
-      .then((body) => setItems(body.items));
+      .then((body) => {
+        setItems(body.items);
+        setTotalCents(cartTotal(body.items));
+      });
   }, []);
-
-  const totalCents = useMemo(
-    () =>
-      items.reduce(
-        (total, item) => total + products[item.productId].priceCents * item.quantity,
-        0,
-      ),
-    [items],
-  );
 
   async function remove(productId) {
     const response = await fetch(`/cart/items/${productId}`, { method: "DELETE" });
@@ -53,4 +55,3 @@ export default function CartPage() {
     </main>
   );
 }
-
