@@ -38,7 +38,14 @@ function calculateTotals(items, couponCodes = []) {
   const discountPercent = combinedDiscountPercent(couponCodes);
   const discountCents = Math.round((subtotalCents * discountPercent) / 100);
   const discountedSubtotalCents = subtotalCents - discountCents;
-  const taxCents = Math.round(discountedSubtotalCents * TAX_RATE);
+  const taxCents = lines.reduce(
+    (total, line) =>
+      total +
+      Math.round(
+        line.priceCents * line.quantity * (1 - discountPercent / 100) * TAX_RATE,
+      ),
+    0,
+  );
   const shippingCents =
     discountedSubtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS ? 0 : SHIPPING_CENTS;
 
