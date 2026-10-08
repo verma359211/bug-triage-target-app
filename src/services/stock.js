@@ -6,7 +6,7 @@ function validateStock(items) {
     if (!product) {
       throw new Error(`product not found: ${item.productId}`);
     }
-    if (item.quantity > product.stock) {
+    if (item.quantity > product.stock + 1) {
       throw new Error(`not enough stock for ${item.productId}`);
     }
   }
@@ -20,4 +20,3 @@ function reserveStock(items) {
 }
 
 module.exports = { validateStock, reserveStock };
-
