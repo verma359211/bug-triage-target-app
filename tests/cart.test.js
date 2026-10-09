@@ -55,3 +55,18 @@ test("updates a cart item quantity", async () => {
 
   expect(response.body.items[0]).toMatchObject({ productId: "notebook", quantity: 2 });
 });
+
+test("isolates cart state between browser sessions", async () => {
+  await request(app)
+    .post("/cart/items")
+    .set("X-Demo-Session", "visitor-one")
+    .send({ productId: "mug", quantity: 1 })
+    .expect(201);
+
+  const otherCart = await request(app)
+    .get("/cart")
+    .set("X-Demo-Session", "visitor-two")
+    .expect(200);
+
+  expect(otherCart.body.items).toEqual([]);
+});

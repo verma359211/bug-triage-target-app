@@ -5,7 +5,7 @@ application:
   purpose: Small in-memory ecommerce demo
   backend: Node.js 20, Express, CommonJS
   frontend: React and Vite
-  persistence: Process memory; restarting the API resets products, cart, and orders
+  persistence: Process memory; browser sessions are isolated and expire after two hours
 
 architecture:
   api_entry: src/app.js
@@ -15,6 +15,7 @@ architecture:
   checkout_flow: cart -> stock validation -> pricing -> stock reservation -> order
   frontend_entry: frontend/src/main.jsx
   storefront: frontend/src/CartPage.jsx
+  session_isolation: Optional X-Demo-Session header selects an isolated in-memory store
 
 apis:
   - method: GET

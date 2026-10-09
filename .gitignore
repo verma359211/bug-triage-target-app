@@ -3,3 +3,4 @@ node_modules/
 coverage/
 result.json
 frontend/dist/
+*.log

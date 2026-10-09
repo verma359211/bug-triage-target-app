@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "npm --prefix frontend run build",
     "start": "node src/server.js",
     "test": "jest"
   },
@@ -14,4 +15,3 @@
     "supertest": "^7.1.4"
   }
 }
-

@@ -5,7 +5,7 @@ A deliberately small in-memory shop used as the target repository for the AI bug
 ## Architecture
 
 ```text
-React cart page
+React storefront
       |
       v
 Express routes -> cart, pricing, stock, and order services -> in-memory store
@@ -39,11 +39,11 @@ The API listens on `http://localhost:3000` by default and provides:
 - `GET /orders`
 - `GET /orders/:id`
 
-All data is held in memory and resets whenever the server restarts.
+All data is held in memory. The storefront assigns each browser an anonymous demo-session ID, so visitors receive isolated carts, inventory, and orders. Sessions expire after two hours and everything resets whenever the server restarts.
 
 ## Frontend
 
-Run the backend first, then use a second terminal:
+For frontend development, run the backend first and then use a second terminal:
 
 ```bash
 cd frontend
@@ -53,7 +53,18 @@ npm run dev
 
 Vite serves the React client and proxies shop API requests to the backend. The storefront supports browsing live inventory, cart quantity changes, coupon previews, checkout totals, and in-memory order history.
 
-Create an optimized frontend build with `npm run build`.
+Create an optimized frontend build from the repository root with `npm run build`. After a build, Express serves the storefront and API together from port 3000.
+
+## Deployment
+
+The included `Dockerfile` creates a production image containing both the optimized React build and Express API. The hosting platform only needs to provide a `PORT` value; no secrets or database are required.
+
+```bash
+docker build -t bug-triage-target-app .
+docker run --rm -p 3000:3000 -e PORT=3000 bug-triage-target-app
+```
+
+Use `GET /health` as the deployment health check. For a non-Docker host, use `npm ci && npm --prefix frontend ci && npm run build` as the build command and `npm start` as the start command.
 
 ## Reproduction workflow
 

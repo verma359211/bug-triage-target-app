@@ -28,9 +28,18 @@ function Icon({ name, size = 18 }) {
 }
 
 async function api(path, options) {
+  let sessionId = localStorage.getItem("northstar-demo-session");
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem("northstar-demo-session", sessionId);
+  }
   const response = await fetch(path, {
     ...options,
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      "X-Demo-Session": sessionId,
+      ...options?.headers,
+    },
   });
   const body = await response.json();
   if (!response.ok) throw new Error(body.error || "Something went wrong");
@@ -83,7 +92,7 @@ function OrderHistory({ orders, products }) {
   if (!orders.length) return null;
   return (
     <section className="orders-section" id="orders">
-      <div className="section-heading"><div><span>Order history</span><h2>Previously confirmed.</h2></div><p>Orders live in memory for this demo and reset with the server.</p></div>
+      <div className="section-heading"><div><span>Order history</span><h2>Previously confirmed.</h2></div><p>Orders are isolated to this browser and expire after two hours.</p></div>
       <div className="orders-grid">
         {[...orders].reverse().map((order) => (
           <article className="order-card" key={order.id}>
