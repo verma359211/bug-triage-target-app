@@ -1,6 +1,6 @@
 # Bug Triage Target App
 
-A deliberately small in-memory shop used as the target repository for the AI bug-triage walking skeleton. It has an Express API, a small React cart page, Jest/Supertest tests, and a GitHub Actions workflow that safely runs generated reproduction tests.
+A deliberately small in-memory shop used as the target repository for the AI bug-triage walking skeleton. It has an Express API, a compact React storefront, Jest/Supertest tests, and a GitHub Actions workflow that safely runs generated reproduction tests.
 
 ## Architecture
 
@@ -29,10 +29,14 @@ npm start
 The API listens on `http://localhost:3000` by default and provides:
 
 - `GET /health`
+- `GET /products`
 - `GET /cart`
 - `POST /cart/items`
+- `PATCH /cart/items/:productId`
 - `DELETE /cart/items/:productId`
+- `POST /checkout/preview`
 - `POST /checkout`
+- `GET /orders`
 - `GET /orders/:id`
 
 All data is held in memory and resets whenever the server restarts.
@@ -47,7 +51,9 @@ npm install
 npm run dev
 ```
 
-Vite serves the React client and proxies cart requests to the backend.
+Vite serves the React client and proxies shop API requests to the backend. The storefront supports browsing live inventory, cart quantity changes, coupon previews, checkout totals, and in-memory order history.
+
+Create an optimized frontend build with `npm run build`.
 
 ## Reproduction workflow
 

@@ -47,7 +47,9 @@ function calculateTotals(items, couponCodes = []) {
     0,
   );
   const shippingCents =
-    discountedSubtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS ? 0 : SHIPPING_CENTS;
+    lines.length === 0 || discountedSubtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS
+      ? 0
+      : SHIPPING_CENTS;
 
   return {
     subtotalCents,

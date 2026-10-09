@@ -1,7 +1,11 @@
 const express = require("express");
-const { getOrder } = require("../services/orders");
+const { getOrder, listOrders } = require("../services/orders");
 
 const router = express.Router();
+
+router.get("/", (_request, response) => {
+  response.json({ orders: listOrders() });
+});
 
 router.get("/:id", (request, response) => {
   const order = getOrder(request.params.id);
@@ -13,4 +17,3 @@ router.get("/:id", (request, response) => {
 });
 
 module.exports = router;
-

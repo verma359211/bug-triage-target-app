@@ -11,6 +11,8 @@ function createOrder(couponCodes = []) {
   const totals = calculateTotals(store.cart, couponCodes);
   const order = {
     id: String(store.orders.length + 1),
+    status: "confirmed",
+    createdAt: new Date().toISOString(),
     items: store.cart.map((item) => ({ ...item })),
     ...totals,
   };
@@ -25,5 +27,8 @@ function getOrder(id) {
   return store.orders.find((order) => order.id === id) || null;
 }
 
-module.exports = { createOrder, getOrder };
+function listOrders() {
+  return store.orders.map((order) => ({ ...order }));
+}
 
+module.exports = { createOrder, getOrder, listOrders };

@@ -4,21 +4,30 @@ const cart = require("../services/cart");
 const router = express.Router();
 
 router.get("/", (_request, response) => {
-  response.json({ items: cart.getCart() });
+  response.json(cart.getCartView());
 });
 
 router.post("/items", (request, response, next) => {
   try {
-    const items = cart.addItem(request.body.productId, request.body.quantity);
-    response.status(201).json({ items });
+    cart.addItem(request.body.productId, request.body.quantity);
+    response.status(201).json(cart.getCartView());
   } catch (error) {
     next(error);
   }
 });
 
 router.delete("/items/:productId", (request, response) => {
-  response.json({ items: cart.removeItem(request.params.productId) });
+  cart.removeItem(request.params.productId);
+  response.json(cart.getCartView());
+});
+
+router.patch("/items/:productId", (request, response, next) => {
+  try {
+    cart.setQuantity(request.params.productId, request.body.quantity);
+    response.json(cart.getCartView());
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
-

@@ -37,3 +37,18 @@ test("creates an order that can be fetched", async () => {
   expect(response.body.items).toEqual([{ productId: "mug", quantity: 1 }]);
 });
 
+test("previews checkout totals without creating an order", async () => {
+  await addMugs(1);
+
+  const preview = await request(app)
+    .post("/checkout/preview")
+    .send({ coupons: ["SAVE10"] })
+    .expect(200);
+  const orders = await request(app).get("/orders").expect(200);
+
+  expect(preview.body.totals).toMatchObject({
+    subtotalCents: 1999,
+    discountPercent: 10,
+  });
+  expect(orders.body.orders).toEqual([]);
+});

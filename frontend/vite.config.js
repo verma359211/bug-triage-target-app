@@ -6,7 +6,9 @@ export default defineConfig({
   server: {
     proxy: {
       "/cart": "http://localhost:3000",
+      "/products": "http://localhost:3000",
+      "/checkout": "http://localhost:3000",
+      "/orders": "http://localhost:3000",
     },
   },
 });
-
