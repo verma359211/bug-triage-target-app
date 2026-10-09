@@ -42,7 +42,7 @@ test("lists the product catalog", async () => {
   });
 });
 
-test("setting quantity to zero removes the cart item", async () => {
+test("updates a cart item quantity", async () => {
   await request(app)
     .post("/cart/items")
     .send({ productId: "notebook", quantity: 1 })
@@ -50,8 +50,8 @@ test("setting quantity to zero removes the cart item", async () => {
 
   const response = await request(app)
     .patch("/cart/items/notebook")
-    .send({ quantity: 0 })
+    .send({ quantity: 2 })
     .expect(200);
 
-  expect(response.body.items).toEqual([]);
+  expect(response.body.items[0]).toMatchObject({ productId: "notebook", quantity: 2 });
 });

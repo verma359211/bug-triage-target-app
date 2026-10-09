@@ -31,15 +31,12 @@ function removeItem(productId) {
 }
 
 function setQuantity(productId, quantity) {
-  if (!Number.isInteger(quantity) || quantity < 0) {
-    throw new Error("quantity must be a non-negative integer");
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    throw new Error("quantity must be a positive integer");
   }
   const existing = store.cart.find((item) => item.productId === productId);
   if (!existing) {
     throw new Error("cart item not found");
-  }
-  if (quantity === 0) {
-    return removeItem(productId);
   }
   existing.quantity = quantity;
   return getCart();
