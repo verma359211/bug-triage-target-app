@@ -88,6 +88,16 @@ models:
   Totals: '{ subtotalCents, discountPercent, discountCents, taxCents, shippingCents, totalCents }'
   Order: '{ id, status, createdAt, items, subtotalCents, discountPercent, discountCents, taxCents, shippingCents, totalCents }'
 
+stable_fixtures:
+  products:
+    - '{ id: mug, name: Coffee Mug, priceCents: 1999, stock: 5 }'
+    - '{ id: notebook, name: Grid Notebook, priceCents: 1250, stock: 10 }'
+    - '{ id: sticker, name: Trace Sticker, priceCents: 101, stock: 20 }'
+    - '{ id: pin, name: Enamel Pin, priceCents: 101, stock: 8 }'
+    - '{ id: tote, name: Canvas Tote, priceCents: 2400, stock: 0 }'
+    - '{ id: deskmat, name: Felt Desk Mat, priceCents: 3200, stock: 4 }'
+  coupons: [SAVE10, SAVE30, VIP30]
+
 services:
   - file: src/services/catalog.js
     functions: [listProducts]
